@@ -13,6 +13,6 @@ class AdminFilter(BaseFilter):
         chat_member = await chat.get_member(user.id)
         
         if chat_member.status not in ('administrator', 'creator'):
-            await message.answer("💂‍♂️💂‍♂️💂‍♂️ Ви не є адміністратором чи власником групи 💂‍♂️💂‍♂️💂‍♂️")
+            await message.answer("💂‍♂️💂‍♂️💂‍♂️ Ви не адміністратор чи власник групи 💂‍♂️💂‍♂️💂‍♂️")
         
         return chat_member.status in ('administrator', 'creator')

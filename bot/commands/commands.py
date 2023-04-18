@@ -4,7 +4,7 @@ from configs import config
 
 async def set_commands(bot: Bot):
     await set_custom_commands(bot)
-    await set_schedule_commands(bot)
+    # await set_schedule_commands(bot)
     await set_crud_commands(bot)
 
 async def set_custom_commands(bot: Bot):
@@ -12,7 +12,7 @@ async def set_custom_commands(bot: Bot):
         BotCommand(command="start", description="Start of the bot"),
         BotCommand(command="schedule", description="Today's schedule")
     ]
-    return await bot.set_my_commands(custom_commands, scope=BotCommandScopeDefault())
+    await bot.set_my_commands(custom_commands, scope=BotCommandScopeDefault())
 
 
 async def set_crud_commands(bot: Bot):
@@ -26,7 +26,7 @@ async def set_crud_commands(bot: Bot):
         BotCommand(command="clear",description="Delete all lessons")
     ]
     
-    return await bot.set_my_commands(
+    await bot.set_my_commands(
         crud_commands, 
         scope=BotCommandScopeAllPrivateChats()
     )
@@ -39,7 +39,7 @@ async def set_schedule_commands(bot: Bot):
         BotCommand(command="off",description="Off notifications")
     ]
 
-    return bot.set_my_commands(
+    await bot.set_my_commands(
         schedule_commands, 
         scope=BotCommandScopeChatAdministrators(chat_id=config.chat_id)
     )

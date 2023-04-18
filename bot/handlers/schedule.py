@@ -34,18 +34,23 @@ async def lesson_form(lesson_id, session: AsyncSession, message):
     now = datetime.now()
     current_day = now.strftime("%A")[:3]
 
-    sql = select(Lesson, LessonOrder).join(Lesson).where(and_(Lesson.day == current_day, \
-        LessonOrder.id == lesson_id))
-    schedule_request = await session.execute(sql)
-    schedule = schedule_request.scalars()
+    try:
+        sql = select(Lesson, LessonOrder).join(Lesson).where(and_(Lesson.day == current_day, \
+            LessonOrder.id == lesson_id))
+        schedule_request = await session.execute(sql)
+        schedule = schedule_request.scalars()
 
-    for lesson in schedule:
-        schedule_entries_text = f'{lesson.order.id}. <b>{lesson.name}</b>\n' \
-                        f'<i>{lesson.teacher}</i>\n' \
-                        f'{lesson.order.start_time.strftime("%H:%M")}-{lesson.order.end_time.strftime("%H:%M")}\n' \
-                        f'🔗 {lesson.link}'
 
-        await message.answer(schedule_entries_text, parse_mode='HTML')
+        for lesson in schedule:
+            schedule_entries_text = f'{lesson.order.id}. <b>{lesson.name}</b>\n' \
+                            f'<i>{lesson.teacher}</i>\n' \
+                            f'{lesson.order.start_time.strftime("%H:%M")}-{lesson.order.end_time.strftime("%H:%M")}\n' \
+                            f'🔗 {lesson.link}'
+
+            await message.answer(schedule_entries_text, parse_mode='HTML')
+    except sqlalchemy.exc.PendingRollbackError:
+        await session.rollback()
+
 
 
 @router.message(Command("off"), ChatTypeFilter(chat_type=["group", "supergroup"]), AdminFilter(chat_type="group"))
