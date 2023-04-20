@@ -47,6 +47,8 @@ async def lesson_form(lesson_id, session: AsyncSession, message):
                         f'🔗 {lesson.link}'
 
         await message.answer(schedule_entries_text, parse_mode='HTML')
+    
+    await session.rollback()
 
 
 @router.message(Command("off"), ChatTypeFilter(chat_type=["group", "supergroup"]), AdminFilter(chat_type="group"))
