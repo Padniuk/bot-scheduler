@@ -4,7 +4,7 @@ from configs import config
 
 async def set_commands(bot: Bot):
     await set_custom_commands(bot)
-    # await set_schedule_commands(bot)
+    await set_schedule_commands(bot)
     await set_crud_commands(bot)
 
 async def set_custom_commands(bot: Bot):

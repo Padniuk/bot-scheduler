@@ -13,7 +13,7 @@ import logging
 async def main():
     logging.basicConfig(level=logging.DEBUG)
 
-    engine = create_async_engine(url=config.db_url, echo=False)
+    engine = create_async_engine(url=config.db_url, echo=True)
     sessionmaker = async_sessionmaker(engine, expire_on_commit=False)
 
     bot = Bot(config.bot_token.get_secret_value())
