@@ -12,7 +12,7 @@ from databases import LessonOrder, Lesson
 from middlewares import WeekendMessageMiddleware
 
 router = Router()
-router.message.middleware(WeekendMessageMiddleware())
+# router.message.middleware(WeekendMessageMiddleware())
 scheduler = AsyncIOScheduler(timezone='Europe/Kiev')
 
 
@@ -31,7 +31,7 @@ async def start_schedule(message: Message, session: AsyncSession):
         await message.answer("🔥🔥🔥 Сповіщення уже ввімкнені 🔥🔥🔥")
 
 async def lesson_form(lesson_id, session: AsyncSession, message):
-    # await session.rollback()
+    await session.rollback()
 
     now = datetime.now()
     current_day = now.strftime("%A")[:3]
