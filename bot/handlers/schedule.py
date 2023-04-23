@@ -31,6 +31,8 @@ async def start_schedule(message: Message, session: AsyncSession):
         await message.answer("🔥🔥🔥 Сповіщення уже ввімкнені 🔥🔥🔥")
 
 async def lesson_form(lesson_id, session: AsyncSession, message):
+    await session.rollback()
+
     now = datetime.now()
     current_day = now.strftime("%A")[:3]
 
@@ -38,8 +40,7 @@ async def lesson_form(lesson_id, session: AsyncSession, message):
         LessonOrder.id == lesson_id))
     schedule_request = await session.execute(sql)
     schedule = schedule_request.scalars()
-
-
+    
     for lesson in schedule:
         schedule_entries_text = f'{lesson.order.id}. <b>{lesson.name}</b>\n' \
                         f'<i>{lesson.teacher}</i>\n' \
@@ -47,8 +48,6 @@ async def lesson_form(lesson_id, session: AsyncSession, message):
                         f'🔗 {lesson.link}'
 
         await message.answer(schedule_entries_text, parse_mode='HTML')
-    
-    await session.rollback()
 
 
 @router.message(Command("off"), ChatTypeFilter(chat_type=["group", "supergroup"]), AdminFilter(chat_type="group"))
